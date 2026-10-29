@@ -75,4 +75,68 @@ public class RepositorioEnlazadoTest {
         assertEquals(7, lista.tamano());
         assertEquals(7, lista.contarRecorriendo());
     }
+
+    @Test
+    public void testListaNuevaDebeEstarVacia() {
+        RepositorioEnlazado lista = new RepositorioEnlazado();
+        assertEquals(0, lista.tamano());
+        assertEquals(0, lista.contarRecorriendo());
+        assertNull(lista.obtener(0));
+    }
+
+    @Test
+    public void testAgregarAlInicioAumentaTamano() {
+        RepositorioEnlazado lista = new RepositorioEnlazado();
+        LecturaSensor l1 = new LecturaSensor("EST-001", "t0", 20, 50, 0);
+        LecturaSensor l2 = new LecturaSensor("EST-002", "t1", 21, 51, 1);
+        lista.agregarAlInicio(l1);
+        assertEquals(1, lista.tamano());
+        assertEquals(1, lista.contarRecorriendo());
+        assertSame(l1, lista.obtener(0));
+
+        lista.agregarAlInicio(l2);
+        assertEquals(2, lista.tamano());
+        assertEquals(2, lista.contarRecorriendo());
+        assertSame(l2, lista.obtener(0));
+        assertSame(l1, lista.obtener(1));
+    }
+
+    @Test
+    public void testEliminarEnListaVaciaRetornaFalse() {
+        RepositorioEnlazado lista = new RepositorioEnlazado();
+        assertFalse(lista.eliminar(0));
+        assertEquals(0, lista.tamano());
+        assertEquals(0, lista.contarRecorriendo());
+    }
+
+    @Test
+    public void testEliminarIndiceInvalido() {
+        RepositorioEnlazado lista = new RepositorioEnlazado();
+        lista.agregarAlFinal(new LecturaSensor("EST-001", "t0", 20, 50, 0));
+        assertFalse(lista.eliminar(-1));
+        assertFalse(lista.eliminar(1));
+        assertFalse(lista.eliminar(5));
+        assertEquals(1, lista.tamano());
+        assertEquals(1, lista.contarRecorriendo());
+    }
+
+    @Test
+    public void testEliminarUnicoNodo() {
+        RepositorioEnlazado lista = new RepositorioEnlazado();
+        LecturaSensor l = new LecturaSensor("EST-001", "t0", 20, 50, 0);
+        lista.agregarAlFinal(l);
+        assertEquals(1, lista.tamano());
+
+        assertTrue(lista.eliminar(0));
+        assertEquals(0, lista.tamano());
+        assertEquals(0, lista.contarRecorriendo());
+        assertNull(lista.obtener(0));
+
+        // Verificar que se puede volver a insertar normalmente
+        LecturaSensor nuevo = new LecturaSensor("EST-002", "t1", 22, 55, 12);
+        lista.agregarAlFinal(nuevo);
+        assertEquals(1, lista.tamano());
+        assertEquals(1, lista.contarRecorriendo());
+        assertSame(nuevo, lista.obtener(0));
+    }
 }
